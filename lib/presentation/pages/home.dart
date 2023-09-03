@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:library_shelf_book/core/constant.dart';
 import 'package:library_shelf_book/data/data_sources/all_books_response.dart';
+import 'package:library_shelf_book/data/data_sources/category_food.dart';
 import 'package:library_shelf_book/presentation/pages/home/bloc/home_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:library_shelf_book/presentation/pages/home/food/bloc/category_bloc.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class Home extends StatefulWidget {
+  const Home({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<Home> createState() => _HomeState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,14 +32,14 @@ class _HomePageState extends State<HomePage> {
         child: const Icon(Icons.add),
       ),
       backgroundColor: backgroundColor,
-      body: BlocBuilder<HomeBloc, HomeState>(
+      body: BlocBuilder<CategoryBloc, CategoryState>(
         builder: (context, state) {
           print('masuk builder');
           print(state);
 
-          if (state is BooksLoadedState) {
+          if (state is CategoryLoadedState) {
             print('home page loaded');
-            AllBooksResponse? bookList = state.allBooksResponse;
+            CategoryFood? categoryList = state.categories;
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -53,11 +55,12 @@ class _HomePageState extends State<HomePage> {
                         mainAxisSpacing: 16,
                         // crossAxisSpacing: 5,
                       ),
-                      itemCount: bookList.books?.length ?? 0,
+                      itemCount: categoryList.categories?.length ?? 0,
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        BooksModel? book = bookList.books?.elementAt(index);
+                        Categories? cat =
+                            categoryList.categories?.elementAt(index);
                         return GestureDetector(
                           onTap: () {},
                           child: Card(
@@ -67,11 +70,13 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Image.network(
-                                  book?.urlImage ?? ''.toString(),
+                                  cat?.strCategoryThumb ?? ''.toString(),
                                   height: 170,
                                   width: 123,
                                 ),
-                                Text(book?.name ?? ''.toString()),
+                                Text(cat?.strCategory ?? ''.toString()),
+                                Text(cat?.strCategoryDescription ??
+                                    ''.toString()),
                               ],
                             ),
                           ),
@@ -83,12 +88,12 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             );
-          } else if (state is BooksLoadingState) {
+          } else if (state is CategoryLoadingState) {
             print('home page loading');
             return const Center(
               child: CircularProgressIndicator(),
             );
-          } else if (state is BooksErrorState) {
+          } else if (state is CategoryErrorState) {
             print('home page error');
             return const Center(
               child: Text("Error"),

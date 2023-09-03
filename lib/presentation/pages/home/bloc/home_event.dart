@@ -5,10 +5,6 @@ abstract class HomeEvent extends Equatable {
 }
 
 class LoadBookEvent extends HomeEvent {
-  final String books;
-
-  const LoadBookEvent(this.books);
-
   @override
   List<Object> get props => [];
 }

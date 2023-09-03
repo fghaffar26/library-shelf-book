@@ -9,18 +9,19 @@ class AllBooksResponse extends Equatable {
   AllBooksResponse({this.books});
 
   AllBooksResponse.fromJson(Map<String, dynamic> json) {
+    print('masuk response');
     if (json['data']['books'] != null) {
       books = <BooksModel>[];
-      json['meals'].forEach((v) {
+      json['data']['books'].forEach((v) {
         books!.add(BooksModel.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final data = <String, dynamic>{};
     if (books != null) {
-      data['meals'] = books!.map((v) => v.toEntity()).toList();
+      data['data']['books'] = books!.map((v) => v.toEntity()).toList();
     }
     return data;
   }
@@ -43,10 +44,10 @@ class BooksModel extends Equatable {
   final String urlImage;
 
   factory BooksModel.fromJson(Map<String, dynamic> json) => BooksModel(
-        id: json['name'],
-        name: json['weather'][0]['main'],
-        publisher: json['weather'][0]['description'],
-        urlImage: json['weather'][0]['icon'],
+        id: json['id'],
+        name: json['name'],
+        publisher: json['publisher'],
+        urlImage: json['urlImage'],
       );
 
   BooksEntity toEntity() => BooksEntity(

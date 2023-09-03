@@ -8,7 +8,8 @@ class GetAllBooks {
   final Booksrepository repository;
 
   GetAllBooks(this.repository);
-  Future<Either<Failure, AllBooksResponse>> execute(String cityName) {
+  Future<Either<Failure, AllBooksResponse>> execute() {
+    print('masuk usecases');
     return repository.getAllBooks();
   }
 }
